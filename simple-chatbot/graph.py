@@ -1,3 +1,4 @@
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph
 
 from agents.primary import PrimaryAgent
@@ -33,5 +34,6 @@ def create_graph():
 
 
 def compile_workflow(workflow):
-    graph = workflow.compile()
+    checkpointer = MemorySaver()
+    graph = workflow.compile(checkpointer=checkpointer)
     return graph

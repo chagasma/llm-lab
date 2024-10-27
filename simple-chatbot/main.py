@@ -5,6 +5,8 @@ workflow = create_graph()
 graph = compile_workflow(workflow)
 print("Graph and workflow created.")
 
+config = {"configurable": {"thread_id": "1"}}
+
 if __name__ == "__main__":
     while True:
         user_input = input("User: ")
@@ -12,7 +14,7 @@ if __name__ == "__main__":
             print("Goodbye!")
             break
 
-        for event in graph.stream({"messages": ("user", user_input)}):
+        for event in graph.stream({"messages": ("user", user_input)}, config):
             # print(event)
             for value in event.values():
                 print(value)

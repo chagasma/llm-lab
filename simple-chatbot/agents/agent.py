@@ -16,8 +16,7 @@ class Agent:
 
     def __init__(self, state: State, temperature=0):
         """
-        Initializes the Agent with a given state and a temperature setting for
-        language model responses.
+        Initializes the Agent
         """
         self.state = state
         self.llm = ChatOpenAI(temperature=temperature)
