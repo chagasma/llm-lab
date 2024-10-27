@@ -1,0 +1,21 @@
+# Virtual environment directories
+venv
+env
+myenv
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyc
+
+# .python-version
+.python-version
+
+# Environment variables file
+.env
+
+# Pycharm
+.idea
+
+# VS Code
+.vs
