@@ -1,17 +1,26 @@
 from langgraph.graph import StateGraph
 
-from agents.primary import primary_agent
-from states.state import State
+from agents.primary import PrimaryAgent
+from states.state import State, STATE
 
 
 def create_graph():
     workflow = StateGraph(State)
 
     # --------------
+    #  Agents instances
+    # --------------
+
+    primary = PrimaryAgent(STATE)
+
+    # --------------
     #  Nodes
     # --------------
 
-    workflow.add_node("primary", primary_agent)
+    workflow.add_node(
+        "primary",
+        lambda state: primary.invoke(state)
+    )
 
     # --------------
     #  Edges

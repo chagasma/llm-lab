@@ -13,6 +13,6 @@ if __name__ == "__main__":
             break
 
         for event in graph.stream({"messages": ("user", user_input)}):
+            # print(event)
             for value in event.values():
                 print(value)
-                print("Assistant:", value["messages"][-1].content)
