@@ -1,9 +1,10 @@
-from graph import create_graph, compile_workflow
+from graph import create_graph, compile_workflow, graph_visualization
 
 print("Creating graph and compiling workflow...")
 workflow = create_graph()
 graph = compile_workflow(workflow)
 print("Graph and workflow created.")
+graph_visualization(graph, "./img/graph.png")
 
 config = {"configurable": {"thread_id": "1"}}
 

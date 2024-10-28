@@ -14,12 +14,12 @@ class Agent:
     should extend this class and implement the `invoke` method for custom behavior.
     """
 
-    def __init__(self, state: State, temperature=0):
+    def __init__(self, state: State, tools: list, temperature=0):
         """
         Initializes the Agent
         """
         self.state = state
-        self.llm = ChatOpenAI(temperature=temperature)
+        self.llm = ChatOpenAI(temperature=temperature).bind_tools(tools)
 
     def update_state(self, key, value):
         """

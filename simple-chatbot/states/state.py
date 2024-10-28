@@ -4,7 +4,9 @@ from typing_extensions import TypedDict, Annotated
 
 class State(TypedDict):
     messages: Annotated[list, add_messages]
+    db_info: Annotated[list, add_messages]
 
 STATE: State = {
-    "messages": []
+    "messages": [],
+    "db_info": []
 }
