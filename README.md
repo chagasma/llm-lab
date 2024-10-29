@@ -1,1 +1,1 @@
-# llm-study
+# llm-lab
