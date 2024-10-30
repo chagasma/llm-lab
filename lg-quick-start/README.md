@@ -23,5 +23,5 @@ cd lg-quick-start
 
 2. Add Required Packages
 ```bash
-uv add langgraph langchain langchain-openai python-dotenv ipython
+uv add langgraph langchain langchain-openai python-dotenv ipython tavily-python langchain_community
 ```
