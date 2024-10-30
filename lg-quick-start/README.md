@@ -25,3 +25,7 @@ cd lg-quick-start
 ```bash
 uv add langgraph langchain langchain-openai python-dotenv ipython tavily-python langchain_community
 ```
+
+## Notes about this study
+
+- Write here about the bind tools and how to use it properly

@@ -4,11 +4,9 @@ from dotenv import load_dotenv
 from langchain_community.tools import TavilySearchResults
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import add_messages, StateGraph, START, END
+from langgraph.graph import add_messages, StateGraph, START
 from langgraph.prebuilt import ToolNode, tools_condition
 from typing_extensions import TypedDict
-
-from IPython.display import Image, display
 
 load_dotenv()
 
