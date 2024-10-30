@@ -4,6 +4,10 @@
 
 Welcome to **LangGraph Quick Start**! I created this repository to document part of my studies of LangGraph, following the [LangGraph Introductory Tutorial](https://langchain-ai.github.io/langgraph/tutorials/introduction/).
 
+## Folders Structures
+
+Add here some explanation about the different kinds folders and how to navigate this project
+
 ## 🔧 Project Setup
 
 For this project, we use **uv**!
@@ -29,3 +33,4 @@ uv add langgraph langchain langchain-openai python-dotenv ipython tavily-python 
 ## Notes about this study
 
 - Write here about the bind tools and how to use it properly
+- How exactly the agent knows witch tool to choose?

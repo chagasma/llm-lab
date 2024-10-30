@@ -71,7 +71,6 @@ for event in events:
     if "messages" in event:
         event["messages"][-1].pretty_print()
 
-
 # config = {"configurable": {"thread_id": "1"}}
 #
 #
