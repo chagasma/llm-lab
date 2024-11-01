@@ -5,11 +5,11 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.constants import START, END
 from langgraph.graph import StateGraph
-from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.prebuilt import ToolNode
 
-from agents.agent import create_agent
+from agents.agent import Agent
 from nodes.node import agent_node
-from prompts.system_prompt import SYSTEM_PROMPT, PRIMARY_PROMPT, CONVERSATION_PROMPT
+from prompts.system_prompt import CONVERSATION_PROMPT
 from states.state import State
 from tools.tavily import tavily_tool
 
@@ -27,11 +27,14 @@ def router(state: State):
         return END
 
 
+primary_message = ""
+primary_agent_instance = Agent(llm, CONVERSATION_PROMPT, [tavily_tool], primary_message)
+
+
 def create_graph():
     workflow = StateGraph(State)
 
-    primary_message = ""
-    primary_agent = create_agent(llm, CONVERSATION_PROMPT, [tavily_tool], system_message=primary_message)
+    primary_agent = primary_agent_instance.create_agent()
     primary_node = functools.partial(agent_node, agent=primary_agent, name="primary")
 
     workflow.add_node("primary", primary_node)
