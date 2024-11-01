@@ -9,6 +9,7 @@ from langgraph.prebuilt import ToolNode
 
 from agents.agent import create_agent
 from nodes.node import agent_node
+from prompts.system_prompts import SYSTEM_PROMPT
 from states.state import State
 from tools.repl import python_repl
 from tools.tavily import tavily_tool
@@ -21,6 +22,7 @@ llm = ChatOpenAI()
 research_agent = create_agent(
     llm,
     [tavily_tool],
+    prompt=SYSTEM_PROMPT,
     system_message="You should provide accurate data for the chart_generator to use.",
 )
 research_node = functools.partial(agent_node, agent=research_agent, name="Researcher")
@@ -28,6 +30,7 @@ research_node = functools.partial(agent_node, agent=research_agent, name="Resear
 chart_agent = create_agent(
     llm,
     [python_repl],
+    prompt=SYSTEM_PROMPT,
     system_message="Any charts you display will be visible by the user.",
 
 )
@@ -87,7 +90,7 @@ workflow.add_edge(START, "Researcher")
 
 graph = workflow.compile()
 
-""" ------
+""" 
  Run
 """
 
