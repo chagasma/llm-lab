@@ -3,7 +3,7 @@ import functools
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.constants import START
+from langgraph.constants import START, END
 from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
@@ -18,6 +18,15 @@ load_dotenv()
 llm = ChatOpenAI()
 
 
+def router(state: State):
+    messages = state["messages"]
+    last_message = messages[-1]
+    if last_message.tool_calls:
+        return "search_tool"
+    else:
+        return END
+
+
 def create_graph():
     workflow = StateGraph(State)
 
@@ -28,15 +37,15 @@ def create_graph():
     workflow.add_node("primary", primary_node)
 
     tool_node = ToolNode(tools=[tavily_tool])
-    workflow.add_node("tool", tool_node)
+    workflow.add_node("search_tool", tool_node)
 
     workflow.add_conditional_edges(
         "primary",
-        tools_condition
+        router
     )
 
     workflow.add_edge(START, "primary")
-    workflow.add_edge("tool", "primary")
+    workflow.add_edge("search_tool", "primary")
 
     return workflow
 
