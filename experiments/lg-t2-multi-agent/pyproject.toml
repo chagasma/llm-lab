@@ -13,4 +13,5 @@ dependencies = [
     "pydantic>=2.9.2",
     "python-dotenv>=1.0.1",
     "tavily-python>=0.5.0",
+    "langchain-tools>=0.1.34",
 ]
