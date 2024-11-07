@@ -1,16 +1,19 @@
 from typing import Literal
 
+from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel
 
-members = ["Primary", "Scheduler"]
+load_dotenv()
+
+members = ["primary_assistant", "scheduling_assistant"]
 SUPERVISOR_PROMPT = (
-    "You are a supervisor tasked with managing a conversation between the"
-    " following workers:  {members}. Given the following user request,"
-    " respond with the worker to act next. Each worker will perform a"
-    " task and respond with their results and status. When finished,"
-    " respond with FINISH."
+    "Você é um supervisor encarregado de gerenciar uma conversa entre os"
+    " seguintes trabalhadores: {members}. Dado o seguinte pedido do usuário,"
+    " responda com o próximo agente a agir. Cada agente realizará uma"
+    " tarefa e responderá com seus resultados e status. Quando terminar,"
+    " responda com FINISH."
 )
 
 options = ["FINISH"] + members
@@ -24,8 +27,8 @@ prompt = ChatPromptTemplate.from_messages(
         MessagesPlaceholder(variable_name="messages"),
         (
             "system",
-            "Given the conversation above, who should act next?"
-            " Or should we FINISH? Select one of: {options}",
+            "Dada a conversa acima, quem deve agir a seguir?"
+            " Ou devemos FINISH? Selecione uma das opções: {options}",
         ),
     ]
 ).partial(options=str(options), members=", ".join(members))

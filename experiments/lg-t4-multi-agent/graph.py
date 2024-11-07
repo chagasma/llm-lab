@@ -8,6 +8,7 @@ from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode
 
 from agents.agent import Agent
+from agents.supervisor import members, supervisor_agent, prompt
 from nodes.node import agent_node
 from prompts.primary_prompts import PRIMARY_PROMPT
 from prompts.scheduling_prompts import SCHEDULING_PROMPT
@@ -40,14 +41,20 @@ def create_graph():
     #    Agents Nodes
     # ----------------------------
 
+    # primary assistant
     primary_assistant = primary_agent_instance.create_agent()
     primary_assistant_node = functools.partial(agent_node, agent=primary_assistant, name="primary_assistant")
 
-    scheduling_assistant = scheduling_agent_instance.create_agent()
+    # scheduling assistant
+    scheduling_assistant = scheduling_agent_instance.create_agent(tools_required=True)
     scheduling_assistant_node = functools.partial(agent_node, agent=scheduling_assistant, name="scheduling_assistant")
 
+    # add nodes
     workflow.add_node("primary_assistant", primary_assistant_node)
     workflow.add_node("scheduling_assistant", scheduling_assistant_node)
+
+    # supervisor
+    workflow.add_node("supervisor", supervisor_agent)
 
     # ----------------------------
     #    Tool Node
@@ -70,7 +77,7 @@ def create_graph():
         last_message = messages[-1]
         if last_message.tool_calls:
             return "call_tool"
-        if "FINAL ANSWER" in last_message.content:
+        if "FINISH" in last_message.content:
             return END
         return "continue"
 
@@ -78,28 +85,40 @@ def create_graph():
     #    Edges
     # ----------------------------
 
-    workflow.add_edge(START, "primary_assistant")
+    workflow.add_edge(START, "supervisor")
+
+    for member in members:
+        workflow.add_edge(member, "supervisor")
+
+    conditional_map = {k: k for k in members}
+    conditional_map["FINISH"] = END
+    workflow.add_conditional_edges("supervisor", lambda x: x["next"], conditional_map)
+
+    workflow.add_edge("primary_assistant", END)
+    workflow.add_edge("scheduling_assistant", END)
 
     workflow.add_conditional_edges(
         "primary_assistant",
         router,
-        {"continue": "scheduling_assistant", "call_tool": "call_tool", END: END},
+        {"continue": "supervisor", "call_tool": "call_tool", END: END},
     )
 
     workflow.add_conditional_edges(
         "scheduling_assistant",
         router,
-        {"continue": "primary_assistant", "call_tool": "call_tool", END: END},
+        {"continue": "supervisor", "call_tool": "call_tool", END: END},
     )
 
-    workflow.add_conditional_edges(
-        "call_tool",
-        lambda x: x["sender"],
-        {
-            "primary_assistant": "primary_assistant",
-            "scheduling_assistant": "scheduling_assistant",
-        },
-    )
+    workflow.add_edge("call_tool", "supervisor")
+
+    # workflow.add_conditional_edges(
+    #     "call_tool",
+    #     lambda x: x["sender"],
+    #     {
+    #         "primary_assistant": "primary_assistant",
+    #         "scheduling_assistant": "scheduling_assistant",
+    #     },
+    # )
 
     return workflow
 

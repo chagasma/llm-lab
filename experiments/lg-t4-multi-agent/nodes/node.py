@@ -1,8 +1,9 @@
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 
 
 def agent_node(state, agent, name):
     result = agent.invoke(state)
+    # print(f'RESULT: {result}')
     return {
-        "messages": [HumanMessage(content=result["messages"][-1].content, name=name)]
+        "messages": [AIMessage(content=result.content, name=name)]
     }

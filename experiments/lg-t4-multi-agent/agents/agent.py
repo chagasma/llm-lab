@@ -26,8 +26,10 @@ class Agent:
 
         return prompt
 
-    def create_agent(self):
+    def create_agent(self, tools_required = False):
         prompt = self.create_prompt()
         prompt = prompt.partial(system_message=self.system_message)
         prompt = prompt.partial(tool_names=", ".join([tool.name for tool in self.tools]))
+        if tools_required:
+            return prompt | self.llm.bind_tools(self.tools, tool_choice='required')
         return prompt | self.llm.bind_tools(self.tools)
