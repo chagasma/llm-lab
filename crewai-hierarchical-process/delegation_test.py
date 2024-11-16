@@ -52,11 +52,11 @@ tell_joke = Task(
 explain_topic = Task(
     description=(
         "Forneça uma explicação clara e objetiva para a pergunta do usuário."
+        "Input do usuário: {user_input}"
     ),
     agent=explainer,
     expected_output=(
         "Uma explicação concisa e acessível sobre o tema especificado pelo usuário.\n"
-        "Input do usuário: {user_input}"
     )
 )
 
