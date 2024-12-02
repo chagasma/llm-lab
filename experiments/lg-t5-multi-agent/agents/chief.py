@@ -2,7 +2,7 @@ from agents.agent import Agent
 from states.state import State
 
 
-class SummarizerAgent(Agent):
+class ChiefAgent(Agent):
     def __call__(self, state: State):
         input_attribute = "messages"
         output_attribute = "messages"

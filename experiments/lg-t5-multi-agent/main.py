@@ -11,14 +11,8 @@ if os.getenv("AMBIENT") == 'DEV':
 
 if __name__ == "__main__":
     summary_input = dedent('''
-    Conversa:
-    
-    user: Olá, meu nome é Mauro
-    assistant: Olá, Mauro! Como posso ajudá-lo?
-    user: Eu gostaria de realizar um agendamento por favor!
-    assistant: Temos horários disponíveis para a próxima terça 14h
-    user: Show! Pode marcar!
-    assistant: Agendamento marcado.
+    Olá! Tudo bem?
+    Eu gostaria de tirar uma dúvida sobre eventos, pode me ajudar?
     ''')
 
     summary = ""

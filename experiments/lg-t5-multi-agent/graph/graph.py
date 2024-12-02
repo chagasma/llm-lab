@@ -1,22 +1,31 @@
 from langgraph.graph import StateGraph
 
-from agents.summarizer import SummarizerAgent
-from prompts.summarizer_prompts import summarizer_prompt
+from prompts.chief_prompts import chief_prompt
+
+from agents.chief import ChiefAgent
 from states.state import State
+from tools.delegate import Delegate
 
 
 def create_graph():
     workflow = StateGraph(State)
 
+    # tools
+    delegate_tool = Delegate()
+
     # agent instance
-    summarizer = SummarizerAgent(State, name="summarizer", prompt=summarizer_prompt)
+    chief = ChiefAgent(State, name="chief", prompt=chief_prompt, tools=[delegate_tool])
 
     # add node
-    workflow.add_node(summarizer.name, summarizer)
+    workflow.add_node(chief.name, chief)
+    workflow.add_node(delegate_tool.name, delegate_tool)
 
     # add edges
-    workflow.set_entry_point(summarizer.name)
-    workflow.set_finish_point(summarizer.name)
+    workflow.set_entry_point(chief.name)
+
+    workflow.add_edge(chief.name, delegate_tool.name)
+
+    workflow.set_finish_point(delegate_tool.name)
 
     return workflow
 
