@@ -10,17 +10,25 @@ from tools.delegate import Delegate
 def create_graph():
     workflow = StateGraph(State)
 
-    # tools
+    # -------------------
+    #   tools
+    # -------------------
     delegate_tool = Delegate()
 
-    # agent instance
+    # -------------------
+    #   agent instance
+    # -------------------
     chief = ChiefAgent(State, name="chief", prompt=chief_prompt, tools=[delegate_tool])
 
-    # add node
+    # -------------------
+    #   nodes
+    # -------------------
     workflow.add_node(chief.name, chief)
     workflow.add_node(delegate_tool.name, delegate_tool)
 
-    # add edges
+    # -------------------
+    #   edges
+    # -------------------
     workflow.set_entry_point(chief.name)
 
     workflow.add_edge(chief.name, delegate_tool.name)
